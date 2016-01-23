@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" />
+	<title>史密斯圆图</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h1 class="middle">史密斯圆图计算软件（Calculating and Drawing Based on Smith Chart）</h1>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="middle">史密斯圆图计算</h3>
+							</div>
+							<div class="panel-body">
+								<form class="form-horizontal" action="/" method="post">
+									<div class="form-group">
+										<label class="col-sm-4 text-1">Z0</label>
+										<div class="col-sm-3">
+											<input type="text" name="z0" class="form-control" placeholder="请输入特征阻抗">
+										</div>
+										<label class="col-sm-1 text-1">Ohm</label>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-1 text-1">F1</label>
+										<div class="col-sm-2">
+											<input type="text" name="f1" class="form-control" placeholder="频率">
+										</div>
+										<label class="col-sm-1 text-1">GHz</label>
+										<label class="col-sm-1 text-1">Z1</label>
+										<div class="col-sm-2">
+											<input type="text" name="z1" class="form-control" placeholder="实部">
+										</div>
+										<label class="col-sm-1 control-label">+j</label>
+										<div class="col-sm-2">
+											<input type="text" name="j1" class="form-control" placeholder="虚部">
+										</div>
+										<div class="col-sm-2">
+											<button type="submit" class="btn btn-info">&nbsp确 定&nbsp</button>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-1 text-1">F2</label>
+										<div class="col-sm-2">
+											<input type="text" name="f2" class="form-control" placeholder="频率">
+										</div>
+										<label class="col-sm-1 text-1">GHz</label>
+										<label class="col-sm-1 text-1">Z2</label>
+										<div class="col-sm-2">
+											<input type="text" name="z2" class="form-control" placeholder="实部">
+										</div>
+										<label class="col-sm-1 control-label">+j</label>
+										<div class="col-sm-2">
+											<input type="text" name="j2" class="form-control" placeholder="虚部">
+										</div>
+										<div class="col-sm-2">
+											<button type="submit" class="btn btn-info">&nbsp确 定&nbsp</button>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-1 text-1">F3</label>
+										<div class="col-sm-2">
+											<input type="text" name="f3" class="form-control" placeholder="频率">
+										</div>
+										<label class="col-sm-1 text-1">GHz</label>
+										<label class="col-sm-1 text-1">Z3</label>
+										<div class="col-sm-2">
+											<input type="text" name="z3" class="form-control" placeholder="实部">
+										</div>
+										<label class="col-sm-1 control-label">+j</label>
+										<div class="col-sm-2">
+											<input type="text" name="j3" class="form-control" placeholder="虚部">
+										</div>
+										<div class="col-sm-2">
+											<button type="submit" class="btn btn-info">&nbsp确 定&nbsp</button>
+										</div>
+									</div>
+								</from>
+							</div>
+						</div>
+						<div class="panel panel-warning">
+							<div class="panel-heading">
+								<h3 class="middle">计算结果</h3>
+							</div>
+							<div class="panel-body">
+								<div class="result-group">
+									<label class="col-sm-1 text-1">z1=</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+										
+									</div>
+									<label class="col-sm-1 text-2">+j</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+										
+									</div>
+									<label class="col-sm-1 text-1">Γ1=</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+									<label class="col-sm-1 text-2">+j</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+								</div>
+								<div class="result-group">
+									<label class="col-sm-1 text-1">z2=</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+									<label class="col-sm-1 text-2">+j</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+									<label class="col-sm-1 text-1">Γ2=</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+									<label class="col-sm-1 text-2">+j</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+								</div>
+								<div class="result-group">
+									<label class="col-sm-1 text-1">z3=</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+									<label class="col-sm-1 text-2">+j</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+									<label class="col-sm-1 text-1">Γ3=</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+									<label class="col-sm-1 text-2">+j</label>
+									<div class="col-sm-2">
+										<input type="text" class="result">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="panel panel-danger">
+							<div class="panel-heading">
+								<h3 class="middle">史密斯圆图</h3>
+							</div>
+							<div class="panel-body">
+								<img src=""  alt="史密斯圆图">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

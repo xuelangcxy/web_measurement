@@ -1,0 +1,12 @@
+{
+  "name": "web_measurement",
+  "description": "hello world test app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x"
+  },
+  "devDependencies": {
+    "hbs": "^4.0.0"
+  }
+}
