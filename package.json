@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "4.x"
+    "body-parser": "^1.14.2",
+    "express": "4.x",
+    "mongoose": "4.3.7"
   },
   "devDependencies": {
     "hbs": "^4.0.0"
