@@ -5,7 +5,9 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.14.2",
+    "connect-mongo": "0.8.2",
     "express": "4.x",
+    "express-session": "^1.13.0",
     "mongoose": "4.3.7"
   },
   "devDependencies": {

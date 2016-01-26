@@ -1,10 +1,25 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var hbs = require('hbs');
 var mongoose = require('mongoose');
 var hash = require('./pass').hash;
+var MongoStore = require('connect-mongo')(session);
+
 
 var app = express();
+app.listen(3000);
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static('public'));
+app.set('views', __dirname + '/views');
+app.set('view engine', 'html');
+app.engine('html', hbs.__express);
+app.use(session({
+	cookie: {maxAge: 1000 * 60 * 60},//an hour
+	secret: 'randomBytes',
+	store: new MongoStore({db:"myapp"})
+}));
 
 mongoose.connect('mongodb://localhost/myapp');
 var UserSchema = new mongoose.Schema({
@@ -13,16 +28,14 @@ var UserSchema = new mongoose.Schema({
 	pwdsalt: String,
 	pwdhash: String
 });
-var User = mongoose.model("users", UserSchema);
+var userModel = mongoose.model("users", UserSchema);
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static('public'));
-app.set('views', __dirname + '/views');
-app.set('view engine', 'html');
-app.engine('html', hbs.__express);
-
+/*
+Help functions
+*/
 function authenticate (name, pwd, callback) {
-	User.findOne({
+	//search user with name, then hash it
+	userModel.findOne({
 		username: name
 	}, 
 
@@ -32,51 +45,100 @@ function authenticate (name, pwd, callback) {
 			hash(pwd, user.pwdsalt, function (err, hash) {
 				if (err) {throw err;}
 				if (hash == user.pwdhash) {
-					console.log("user has registed!");
+					console.log("welcome " + user.username + "!");
 					return callback(null, user);
 				} else {
 					console.log("invalid password!");
+					return callback(null);
 				}
 			});
 		} else {
 			console.log("cannot find the user!");
+			callback(null);
 		}
 		
 	});
-}
+};
 
+function userExist (req, res, next) {
+	userModel.count({
+		username: req.body.username
+	},
+
+	function (err, count) {
+		if (count === 0) {
+			next();
+		} else{
+			console.log("The username has been registed, please use another name!");
+			res.redirect('/signin');
+		}
+
+	});
+};
+
+
+/* 
+Routers
+*/
 app.get('/', function (req, res) {
-   res.render('choice');
+	if (req.session.user) {
+		res.redirect("/index");
+	} else{
+		res.render('choice');
+	}
 });
 app.get('/index', function (req, res) {
-	res.render('index');
+	if (req.session.user) {
+		res.render('index');
+	}
 });
 app.get('/login', function (req, res) {
-	res.render('login');
+	if (req.session.user) {
+		res.redirect("/index");
+	} else{
+		res.render('login');
+	}
 });
 app.get('/signin', function (req, res) {
-	res.render('signin');
+	if (req.session.user) {
+		res.redirect("/index");
+	} else{
+		res.render('signin');
+	}
+});
+app.get('/logout', function (req, res) {
+    req.session.destroy(function () {
+    	console.log("Thank you!")
+        res.redirect('/');
+    });
 });
 
 app.post('/login', function (req, res) {
 	authenticate(req.body.username, req.body.password, function (err, user) {
 		if (err) {throw err;}
 		if (user) {
-			res.redirect('/index');
+			req.session.regenerate(function() {
+				req.session.user = user;
+				req.session.success = 'Authenticated as ' + user.username + '. And welcome!';
+				console.log(req.session.success);
+				res.redirect('/index');
+			});
 		} else{
+			req.session.error = 'Authentication failed, please check your username and password.';
+			console.log(req.session.error);
 			res.redirect('/login');
 		}
-	})
+	});
 });
 
-app.post('/signin', function (req, res) {
+app.post('/signin', userExist, function (req, res) {
 	var userName = req.body.username;
 	var userPwd = req.body.password;
 	console.log(userName);
 	console.log(userPwd + '/n');
 
 	hash(userPwd, function (err, salt, hash) {
-		var user = new User({
+		var user = new userModel({
 			username: userName,
 			userpwd: userPwd,
 			pwdsalt: salt,
@@ -86,16 +148,15 @@ app.post('/signin', function (req, res) {
 			if (err) {throw err;}
 			authenticate(newUser.username, newUser.userpwd, function (err, user) {
 				if (user) {
-					res.redirect('/index');
+					req.session.regenerate(function(){
+                        req.session.user = user;
+                        req.session.success = 'Authenticated as ' + user.username + '. And welcome!';
+                        console.log(req.session.success);
+                        res.redirect('/index');
+                    });
 				}
-			})
-			// console.log(newUser.username);
-			// console.log(newUser.userpwd);
-			// console.log(newUser.pwdsalt);
-			// console.log(newUser.pwdhash);
+			});
 		});
 	});
 
 });
-
-app.listen(3000);
