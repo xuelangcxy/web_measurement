@@ -3,9 +3,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var hbs = require('hbs');
 var mongoose = require('mongoose');
-var hash = require('./pass').hash;
 var MongoStore = require('connect-mongo')(session);
-
+var hash = require('./pass').hash;
+var calculateResult = require('./calculate.js').calculateResult;
 
 var app = express();
 app.listen(3000);
@@ -76,7 +76,6 @@ function userExist (req, res, next) {
 	});
 };
 
-
 /* 
 Routers
 */
@@ -89,6 +88,9 @@ app.get('/', function (req, res) {
 });
 app.get('/index', function (req, res) {
 	if (req.session.user) {
+		// indentification = req.session.user._id;
+  //       console.log(indentification);
+  //       ls.stdin.write("calculate(1,2,110,44,3,44,55,5,66,77)"+ "\n");
 		res.render('index');
 	}
 });
@@ -111,6 +113,15 @@ app.get('/logout', function (req, res) {
     	console.log("Thank you!")
         res.redirect('/');
     });
+});
+app.get('/fresh', function (req, res) {
+	var userTmp = req.session.user;
+	req.session.regenerate(function() {
+		req.session.user = userTmp;
+		req.session.success = 'Welcome ' + userTmp.username + ' again!';
+		console.log(req.session.success);
+		res.redirect('/index');
+	});
 });
 
 app.post('/login', function (req, res) {
@@ -158,5 +169,40 @@ app.post('/signin', userExist, function (req, res) {
 			});
 		});
 	});
-
 });
+
+app.post('/', function (req, res) {
+	var trynum = {};
+    var info = req.body;
+    calculateResult(info, function (err, result) {
+    	if (err) {throw err;}
+		trynum = {
+			r1: result[0],
+			x1: result[1],
+			tr1: result[2],
+			ti1: result[3],
+			r2: result[4],
+			x2: result[5],
+			tr2: result[6],
+			ti2: result[7],
+			r3: result[8],
+			x3: result[9],
+			tr3: result[10],
+			ti3: result[11],
+			position: "pic/firstpicture.png"
+		};
+		console.log(trynum);
+		res.render('result', {
+			dataIn: info,
+			dataOut: trynum
+		});
+		console.log("*******************");
+    });
+});
+
+
+
+
+
+
+
