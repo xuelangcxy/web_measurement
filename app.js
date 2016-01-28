@@ -88,9 +88,6 @@ app.get('/', function (req, res) {
 });
 app.get('/index', function (req, res) {
 	if (req.session.user) {
-		// indentification = req.session.user._id;
-  //       console.log(indentification);
-  //       ls.stdin.write("calculate(1,2,110,44,3,44,55,5,66,77)"+ "\n");
 		res.render('index');
 	}
 });
@@ -196,13 +193,10 @@ app.post('/', function (req, res) {
 			dataIn: info,
 			dataOut: trynum
 		});
-		console.log("*******************");
+		console.log("\n" + "*******************finish calculate!" + "\n");
     });
 });
 
-
-
-
-
-
-
+process.on('uncaughtException', function (err) {
+	console.log(err);
+});

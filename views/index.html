@@ -24,8 +24,8 @@
 								<form class="form-horizontal" action="/" method="post">
 									<div class="form-group">
 										<label class="col-sm-4 text-1">Z0</label>
-										<div class="col-sm-3">
-											<input type="text" name="z0" class="form-control" placeholder="请输入特征阻抗">
+										<div class="col-sm-4">
+											<input type="text" name="z0" class="form-control" placeholder="请输入特征阻抗{{dataIn.z0}}">
 										</div>
 										<label class="col-sm-1 text-1">Ohm</label>
 									</div>
@@ -43,8 +43,7 @@
 										<div class="col-sm-2">
 											<input type="text" name="j1" class="form-control" placeholder="虚部">
 										</div>
-										<div class="col-sm-2">
-											<button type="submit" class="btn btn-info">&nbsp确 定&nbsp</button>
+										<div class="col-sm-2">	
 										</div>
 									</div>
 									<div class="form-group">
@@ -62,7 +61,6 @@
 											<input type="text" name="j2" class="form-control" placeholder="虚部">
 										</div>
 										<div class="col-sm-2">
-											<button type="submit" class="btn btn-info">&nbsp确 定&nbsp</button>
 										</div>
 									</div>
 									<div class="form-group">
@@ -80,7 +78,7 @@
 											<input type="text" name="j3" class="form-control" placeholder="虚部">
 										</div>
 										<div class="col-sm-2">
-											<button type="submit" class="btn btn-info">&nbsp确 定&nbsp</button>
+											<button type="submit" class="btn btn-info">确 定</button>
 										</div>
 									</div>
 								</from>
@@ -93,59 +91,80 @@
 							<div class="panel-body">
 								<div class="result-group">
 									<label class="col-sm-1 text-1">z1=</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
-										
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.r1}} -->
 									</div>
 									<label class="col-sm-1 text-2">+j</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
-										
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.x1}} -->
 									</div>
 									<label class="col-sm-1 text-1">Γ1=</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.tr1}} -->
 									</div>
 									<label class="col-sm-1 text-2">+j</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.ti1}} -->
 									</div>
 								</div>
 								<div class="result-group">
 									<label class="col-sm-1 text-1">z2=</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.r2}} -->
 									</div>
 									<label class="col-sm-1 text-2">+j</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.x2}} -->
 									</div>
 									<label class="col-sm-1 text-1">Γ2=</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.tr2}} -->
 									</div>
 									<label class="col-sm-1 text-2">+j</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.ti2}} -->
 									</div>
 								</div>
 								<div class="result-group">
 									<label class="col-sm-1 text-1">z3=</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.r3}} -->
 									</div>
 									<label class="col-sm-1 text-2">+j</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.x3}} -->
 									</div>
 									<label class="col-sm-1 text-1">Γ3=</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.tr3}} -->
 									</div>
 									<label class="col-sm-1 text-2">+j</label>
-									<div class="col-sm-2">
-										<input type="text" class="result">
+									<div class="col-sm-2" style="margin-top:7px">
+										<!-- <input type="text" class="result"> -->
+										<!-- {{dataOut.ti3}} -->
 									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-info">
+							<div class="panel-heading">欢迎</div>
+							<div class="panel-body">
+								<div class="col-sm-6 middle">
+									<a class="btn btn-info" href="/logout">退出</a>
+								</div>
+								<div class="col-sm-6 middle">
+									<a class="btn btn-info" href="/fresh">刷新</a>
 								</div>
 							</div>
 						</div>
@@ -156,7 +175,7 @@
 								<h3 class="middle">史密斯圆图</h3>
 							</div>
 							<div class="panel-body">
-								<img src=""  alt="史密斯圆图">
+								<img src=""  alt="史密斯圆图" style="margin-left: 20px;width:733px;height:550px;">
 							</div>
 						</div>
 					</div>

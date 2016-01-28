@@ -1,5 +1,4 @@
 var spawn = require('child_process').spawn;
-// var matlabProcess = spawn('/Applications/MATLAB_R2014b.app/bin/matlab',['-nosplash','-nodesktop']);
 
 function getResult (matlabData, callback) {
 	var dataObj = matlabData.split(/[^\d\.]+/);
@@ -19,8 +18,8 @@ function getResult (matlabData, callback) {
 exports.calculateResult = function (info, callback) {
 	var matlabProcess = spawn('/Applications/MATLAB_R2014b.app/bin/matlab',['-nosplash','-nodesktop']);
 	console.log(info);
-	console.log(matlabProcess.stdin.write("calculate("+info.z0+","+info.f1+","+info.z1+","+info.j1+","+info.f2+","+info.z2+","+info.j2+","+info.f3+","+info.z3+","+info.j3+")"+ "\n"));
-	console.log("----------------");
+	matlabProcess.stdin.write("calculate("+info.z0+","+info.f1+","+info.z1+","+info.j1+","+info.f2+","+info.z2+","+info.j2+","+info.f3+","+info.z3+","+info.j3+")"+ "\n");
+	console.log("Start calculate----------------");
 	matlabProcess.stderr.on('data', function (data) {
 		console.log("err is: " + data);
 		return callback(err)
@@ -32,7 +31,7 @@ exports.calculateResult = function (info, callback) {
 		if (matlabData.indexOf("result") >= 0) {
 			getResult(matlabData, function (result) {
 				matlabProcess.kill();
-				console.log("getResult and clear all");
+				console.log("clear all and exports the result: ");
 				callback(null, result);
 			});
 		}
