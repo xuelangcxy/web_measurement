@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
 var hbs = require('hbs');
 var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);
@@ -15,6 +16,7 @@ app.use(express.static('public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 app.engine('html', hbs.__express);
+app.use(cookieParser());
 app.use(session({
 	cookie: {maxAge: 1000 * 60 * 60},//an hour
 	secret: 'randomBytes',
@@ -70,7 +72,7 @@ function userExist (req, res, next) {
 			next();
 		} else{
 			console.log("The username has been registed, please use another name!");
-			res.redirect('/signin');
+			res.redirect('/register');
 		}
 
 	});
@@ -88,7 +90,9 @@ app.get('/', function (req, res) {
 });
 app.get('/index', function (req, res) {
 	if (req.session.user) {
-		res.render('index');
+		res.render('index', {dataUser: req.session.user});
+	} else {
+		res.redirect('/')
 	}
 });
 app.get('/login', function (req, res) {
@@ -98,16 +102,18 @@ app.get('/login', function (req, res) {
 		res.render('login');
 	}
 });
-app.get('/signin', function (req, res) {
+app.get('/register', function (req, res) {
 	if (req.session.user) {
 		res.redirect("/index");
 	} else{
-		res.render('signin');
+		res.render('register');
 	}
 });
 app.get('/logout', function (req, res) {
+	// req.clearCookie('connect.sid');
+	res.clearCookie('connect.sid', { path: '/' });
+	req.session.user = null;
     req.session.destroy(function () {
-    	console.log("Thank you!")
         res.redirect('/');
     });
 });
@@ -139,7 +145,7 @@ app.post('/login', function (req, res) {
 	});
 });
 
-app.post('/signin', userExist, function (req, res) {
+app.post('/register', userExist, function (req, res) {
 	var userName = req.body.username;
 	var userPwd = req.body.password;
 	console.log(userName);
@@ -171,30 +177,39 @@ app.post('/signin', userExist, function (req, res) {
 app.post('/', function (req, res) {
 	var trynum = {};
     var info = req.body;
-    calculateResult(info, function (err, result) {
-    	if (err) {throw err;}
-		trynum = {
-			r1: result[0],
-			x1: result[1],
-			tr1: result[2],
-			ti1: result[3],
-			r2: result[4],
-			x2: result[5],
-			tr2: result[6],
-			ti2: result[7],
-			r3: result[8],
-			x3: result[9],
-			tr3: result[10],
-			ti3: result[11],
-			position: "pic/firstpicture.png"
-		};
-		console.log(trynum);
-		res.render('result', {
-			dataIn: info,
-			dataOut: trynum
+    var sessionUser = req.session.user;
+	if (sessionUser) {
+		calculateResult(info, function (err, result) {
+			if (err) {
+				throw err;
+			}
+			trynum = {
+				r1: result[0],
+				x1: result[1],
+				tr1: result[2],
+				ti1: result[3],
+				r2: result[4],
+				x2: result[5],
+				tr2: result[6],
+				ti2: result[7],
+				r3: result[8],
+				x3: result[9],
+				tr3: result[10],
+				ti3: result[11],
+				position: "pic/firstpicture.png"
+			};
+			console.log(trynum);
+			res.render('result', {
+				dataIn: info,
+				dataOut: trynum,
+				dataUser: sessionUser
+			});
+			console.log("\n" + "*******************finish calculate!" + "\n");
 		});
-		console.log("\n" + "*******************finish calculate!" + "\n");
-    });
+	} else {
+		res.redirect('/logout');
+	}
+    
 });
 
 process.on('uncaughtException', function (err) {
