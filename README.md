@@ -7,11 +7,11 @@
 ## 页面展示
 
  - web app 主页面：
-![](https://github.com/dorkpon/web_measurement/tree/master/readmePic/home.png)
+![](https://github.com/dorkpon/web_measurement/raw/master/readmePic/home.png)
  - node.js 服务器端处理过程 console.log ：
-![](https://github.com/dorkpon/web_measurement/tree/master/readmePic/calculate.png)
+![](https://github.com/dorkpon/web_measurement/raw/master/readmePic/calculate.png)
  - 处理结果返回：
-![](https://github.com/dorkpon/web_measurement/tree/master/readmePic/result.png)
+![](https://github.com/dorkpon/web_measurement/raw/master/readmePic/result.png)
 
 ## 使用的框架
 
@@ -49,7 +49,7 @@
 
 添加nodejs需要依赖的模块
 
-```
+```js
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -68,7 +68,7 @@ app.listen(3000);
 
 配置好应用所需要使用和定义的内容项：处理body传来的请求，文件存储位置，渲染模板引擎，session，cookie
 
-```
+```js
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static('public'));
 app.set('views', __dirname + '/views');
@@ -87,7 +87,7 @@ app.use(session({
 
 数据库使用mongodb，存在本地`localhost/myapp`中。指定数据库存储的内容：用户名、密码、哈希盐、哈希值
 
-```
+```js
 mongoose.connect('mongodb://localhost/myapp');
 var UserSchema = new mongoose.Schema({
 	username: String,
@@ -103,7 +103,7 @@ var userModel = mongoose.model("users", UserSchema);
 **验证函数：**
 以用户名和密码作为参数，以用户名索引数据库里的用户，若存在，则接着检查密码的正确性，正确的话回调user。
 
-```
+```js
 function authenticate (name, pwd, callback) {
 	//search user with name, then hash it
 	userModel.findOne({
@@ -135,7 +135,7 @@ function authenticate (name, pwd, callback) {
 **用户存在判断函数:**
 以用户名索引数据库里面的用户，回调返回出现的次数`count`后，对`count`进行处理判断用户名是否被注册。
 
-```
+```js
 function userExist (req, res, next) {
 	userModel.count({
 		username: req.body.username
