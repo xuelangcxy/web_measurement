@@ -2,7 +2,7 @@
 
 ## 简介
 
-用 node 搭建的一个 web app ，多用户注册登录连接至服务器，通过用户输入 Smith 圆图所需的基本参数，调用 Matlab 来计算出结果并绘制仿真出 Smith 圆图返回给用户。
+用 node 搭建的一个 web app ，多用户注册登录连接至服务器。用户通过输入 Smith 圆图所需的基本参数，传入服务器，调用 Matlab 来计算出结果并绘制仿真出 Smith 圆图返回给用户。
 
 ## 页面展示
 
@@ -10,7 +10,7 @@
 <br> 
 ![](https://github.com/dorkpon/web_measurement/raw/master/readmePic/home.png)
 
- - node.js 服务器端处理过程 console.log ：
+ - node.js 服务器端处理过程 console.log() ：
  <br>
 ![](https://github.com/dorkpon/web_measurement/raw/master/readmePic/calculate.png)
 
@@ -222,7 +222,7 @@ app.get('/logout', function (req, res) {
     });
 });
 ```
-暂存session信息后重新赋值进而刷新页面：
+暂存session信息后重新赋值给session进而刷新页面：
 
 ```js
 app.get('/fresh', function (req, res) {
@@ -235,7 +235,7 @@ app.get('/fresh', function (req, res) {
 	});
 });
 ```
-
+获取/login 的POST请求传过来的用户名密码，用authenticate()验证用户名、密码通过后新建立一个session会话，重定向至/index：
 
 ```js
 app.post('/login', function (req, res) {
@@ -256,7 +256,7 @@ app.post('/login', function (req, res) {
 	});
 });
 ```
-
+获取到/register 的POST请求，首先判断该用户是否存在于数据库中，然后通过hash加密POST请求传过来的password，返回加密后的password，以及中间产物salt、hash值，保存在数据库中。数据库回调一个刚保存的newUser，调用authenticate函数验证新建session会话，定向至/index：
 
 ```js
 app.post('/register', userExist, function (req, res) {
@@ -288,7 +288,7 @@ app.post('/register', userExist, function (req, res) {
 	});
 });
 ```
-
+获取到/ POST请求，将用户输入的参数info传入calculate()计算得到回调结果result，赋值给对象trynum，最后渲染result页面：
 
 ```js
 app.post('/', function (req, res) {
@@ -385,11 +385,11 @@ exports.hash = function (password, salt, callback) {
 var spawn = require('child_process').spawn;
 
 function getResult (matlabData, callback) {
-	var dataObj = matlabData.split(/[^\d\.]+/);
+	var dataObj = matlabData.split(/[^\d\.]+/); // remove the string except num and radix point, and make it in a new array
 	var result = [];
 	var k = 0;
 	for (var i = 0; i < dataObj.length; i++) {
-		if (i == 0 || i == 1 || i == 2 || i == 10 || i == 11 || i == 17) {
+		if (i == 0 || i == 1 || i == 2 || i == 10 || i == 11 || i == 17) { // remove some nums we don't need
 			continue;
 		} else {
 			result[k] = dataObj[i];
@@ -400,23 +400,23 @@ function getResult (matlabData, callback) {
 };
 
 exports.calculateResult = function (info, callback) {
-	var matlabProcess = spawn('/Applications/MATLAB_R2014b.app/bin/matlab',['-nosplash','-nodesktop']);
+	var matlabProcess = spawn('/Applications/MATLAB_R2014b.app/bin/matlab',['-nosplash','-nodesktop']); // start a child-process
 	console.log(info);
-	matlabProcess.stdin.write("calculate("+info.z0+","+info.f1+","+info.z1+","+info.j1+","+info.f2+","+info.z2+","+info.j2+","+info.f3+","+info.z3+","+info.j3+")"+ "\n");
+	matlabProcess.stdin.write("calculate("+info.z0+","+info.f1+","+info.z1+","+info.j1+","+info.f2+","+info.z2+","+info.j2+","+info.f3+","+info.z3+","+info.j3+")"+ "\n"); //wtite in data 
 	console.log("Start calculate----------------");
-	matlabProcess.stderr.on('data', function (data) {
+	matlabProcess.stderr.on('data', function (data) { //deal with error
 		console.log("err is: " + data);
 		return callback(err)
 	});
-	matlabProcess.stdout.on('data', function (data) {
+	matlabProcess.stdout.on('data', function (data) { //stdout the calculating data of matlab
 		var matlabData = '';
 		matlabData = data.toString();
 		console.log(matlabData);
 		if (matlabData.indexOf("result") >= 0) {
-			getResult(matlabData, function (result) {
-				matlabProcess.kill();
+			getResult(matlabData, function (result) { // pick up the data we need
+				matlabProcess.kill(); // end the child-process
 				console.log("clear all and exports the result: ");
-				callback(null, result);
+				callback(null, result); //callback the final result
 			});
 		}
 	});
